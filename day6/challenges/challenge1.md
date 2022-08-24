@@ -19,7 +19,7 @@ Open your terminal and type:
 ```shell
 $ docker version
 ```
-Output will be something like:
+Output will be something like this (don't worry if the versions differentiate):
 ```shell
 Client: Docker Engine - Community
  Version:           19.03.8
@@ -49,7 +49,7 @@ Server: Docker Engine - Community
   Version:          0.18.0
   GitCommit:        fec3683
   ```
-  If you've got a similar output, this means that your Docker installation is successful and your Docker Cli can communicate with the Docker Daemon without any problem. This output also shows us the Docker Cli - Docker Daemon versions and their details. Your might get the following ``` Error response from daemon: open \\.\pipe\docker_engine_linux: The system cannot find the file specified. ``` This means that the Docker Cli could not connect to the Docker Daemon. In that case the Docker Daemon might not have started properly. Just try to start the daemon process again and retry.
+  If you've got a similar output, this means that your Docker installation is successful and your Docker Cli can communicate with the Docker Daemon without any problem. This output also shows us the Docker Cli - Docker Daemon versions and their details. You might get the following ``` Error response from daemon: open \\.\pipe\docker_engine_linux: The system cannot find the file specified.``` This means that the Docker Cli could not connect to the Docker Daemon. In that case the Docker Daemon might not have started properly. Just try to start the daemon process again and retry. If you are using the WSL 2 you might get the following error: ```The command 'docker' could not be found...```. Again starting the daemon process new could solve this. Alternatively make sure you have set up Docker fpr using the WSL 2.
 </details>
 
 ***
@@ -87,7 +87,8 @@ Server:
  […]
  ```
 
- This command displays system wide information of Docker Daemon. Information displayed includes the kernel version, number of containers and images. At the moment, we don't have any running, paused or stopped containers on our system. Also we don't have any container images pulled yet. This will change in a few minutes. But before running our first Docker container, let's learn "how to use Docker Cli?"
+ This command displays system wide information of Docker Daemon. Should you get an ```ERROR: error during connect``` start the Docker Daemon again.
+ Information displayed includes the kernel version, number of containers and images. At the moment, we don't have any running, paused or stopped containers on our system. Also we don't have any container images pulled yet. This will change in a few minutes. But before running our first Docker container, let's learn "how to use Docker Cli?"
 </details>
 
 ***
@@ -114,9 +115,9 @@ Commands:
   […]
 ```
 
-It is fairly simple to figure out how the Docker Cli is used. Just type ```docker``` and after that type the command that you want to execute + options that you want to use. That simple. For example, a simple Docker command to run a container is ```docker run hello-world```. This will create a container by hello-world Docker image. ```docker run --name azuredevcol hello-world``` this will create another container using the same image but this time the container will have the name "azuredevcol". You see, it's quite simple. But it got more complicated over time. Docker had roughly 40 top-level solo commands like run, inspect, build, attach etc. While these commands worked very well for a while, they had a few issues and Docker decided to solve these issues by introducing the management commands. Docker started to group these commands logically with Docker Cli version 1.13 and called these new groups management commands. Each group represents a single Docker object or ability. For example, all the commands related to container objects are grouped together under the "container" management command. Going back to the previous example - remember the simple Docker command to run a container was ```docker run hello-world```. Now it's ```docker container run hello-world```. The Docker Cli is backward-compatible so it still supports the old way of cli but using the management command approach is the future. 
+It is fairly simple to figure out how the Docker Cli is used. Just type ```docker``` and after that type the command that you want to execute + options that you want to use. That simple. For example, a simple Docker command to run a container is ```docker run hello-world```. This will create a container using the hello-world Docker image. ```docker run --name azuredevcol hello-world``` will create another container using the same image but this time the container will have the name "azuredevcol". You see, it's quite simple. But the list of commands grew over time making it more complicated. Docker had roughly 40 top-level solo commands like run, inspect, build, attach etc. While these commands worked very well for a while, they had a few issues and Docker decided to solve these issues by introducing the management commands. Docker started to group these commands logically with Docker Cli version 1.13 and called these new groups management commands. Each group represents a single Docker object or ability. For example, all the commands related to container objects are grouped together under the **"container"** management command. Going back to the previous example - remember the simple Docker command to run a container was ```docker run hello-world```. Now it's ```docker container run hello-world```. The Docker Cli is backward-compatible so it still supports the old cli but using the management command approach is the future. 
 
-Long story short, Docker Cli syntax is fairly simple. Just type ```docker``` and after that type the management command of the object that you want to play, like ```image```, ```container```, ```volume``` and after that type the command that you want to execute, like ```run```, ```stop```, ```pull```, ```inspect``` + options that you want to use. Couple of examples:
+Long story short, Docker Cli syntax is fairly simple. Just type ```docker``` and after that type the management command of the object that you want to work with, like ```image```, ```container```, ```volume``` and after that type the command that you want to execute, like ```run```, ```stop```, ```pull```, ```inspect``` + options that you want to use. Couple of examples:
 
 ```shell 
 $ docker container run --name container1 busybox ping -c 5 www.bing.com
@@ -151,7 +152,8 @@ Commands:
 
 Run 'docker container COMMAND --help' for more information on a command.
 ```
-```--help``` option listed all the sub-commands under the container management command. Now we know which commands do we have and what are they used for. We can even go further and ask for help for the sub-commands. For example. 
+
+The `--help` option listed all the sub-commands under the container management command. Now we know which commands we have and what they are used for. We can even go further and ask for help for the sub-commands. For example. 
 
 Type:
 ```shell

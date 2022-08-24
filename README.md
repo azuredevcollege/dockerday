@@ -12,19 +12,27 @@
 
 </div>
 
-## Training Days
+---
+
+## Goal
+The main goal of the Docker Fundamentals Day is building Linux Container and Docker knowledge. We will also shed light on the different options to host containers on Azure. By the end of the day, all developers will be able to build Docker images and have the information related to running them on production systems.
+
+---
+
+## Agenda and Syllabus
 
 This workshop consists of multiple challenges, you have to complete. Your trainers will guide you through the workshop by giving you introduction talks to each of the topics/challenges you have to complete.  
 
 Here's the overview of the training day. Happy hacking!
   
-- [Part 1 - Docker Containers](day6/README.md)
-- [Day 2 - Application Development](day2/README.md)
-- [Day 3 - Data and AI](day3/README.md)
-- [Day 4 - DevOps and Monitoring](day4/README.md)
-- [Day 5 - Identity and Architectures](day5/README.md)
-- [Day 6 - Containerization](day6/README.md)
-- [Day 7 - Kubernetes](day7/README.md)
+- [Challenge 1: Docker 101](day6/challenges/challenge1.md)
+- [Challenge 2: Container 101](day6/challenges/challenge2.md)
+- [Challenge 3: Docker Objects](day6/challenges/challenge3.md)
+- [Challenge 4: Image and Registry](day6/challenges/challenge4.md)
+- [Challenge 5: Azure Container Services](day6/challenges/challenge5.md)
+- [Day 6 - Containerization](day6/challenges/challenge2.md)
+- [Challenge 6: Self-learning](day6/challenges/challenge6.md)
+---
 
 ## Contributing ##
 
