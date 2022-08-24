@@ -1,6 +1,6 @@
 <div align="center">
-  <h1>Welcome to the Azure Developer College!</h1>
-  <p>The Azure Developer College is a multi-days training for developers.</p>
+  <h1>Welcome to the Docker Fundamentals Day!</h1>
+  <p>The Docker Fundamentals Day is a single-day training for developers.</p>
   
 ![ADC](./images/azdc.png)
 
@@ -16,9 +16,9 @@
 
 This workshop consists of multiple challenges, you have to complete. Your trainers will guide you through the workshop by giving you introduction talks to each of the topics/challenges you have to complete.  
 
-Here's the overview of the training week. Happy hacking!
+Here's the overview of the training day. Happy hacking!
   
-- [Day 1 - Azure Fundamentals](day1/README.md)
+- [Part 1 - Docker Containers](day6/README.md)
 - [Day 2 - Application Development](day2/README.md)
 - [Day 3 - Data and AI](day3/README.md)
 - [Day 4 - DevOps and Monitoring](day4/README.md)

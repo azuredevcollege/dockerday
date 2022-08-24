@@ -1,5 +1,0 @@
-{
-    "appService.preDeployTask": "day5publishScmResources",
-    "appService.deploySubpath": "publish",
-    "appService.defaultWebAppToDeploy": "None"
-}
