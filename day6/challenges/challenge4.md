@@ -7,7 +7,7 @@
 - Building your own image
 - Image registries and repositories
 
-In this challenge, we're gonna play with Docker Images. A Docker container image is a lightweight, standalone, executable package of software that includes everything needed to run an application: code, runtime, system tools, system libraries and settings. 
+In this challenge, we're going to play with Docker Images. A Docker container image is a lightweight, standalone, executable package of software that includes everything needed to run an application: code, runtime, system tools, system libraries and settings. 
 
 ## Exercises
 
@@ -16,7 +16,7 @@ In this challenge, we're gonna play with Docker Images. A Docker container image
 <details>
   <summary>Click to expand!</summary>
 
-Let's pull an image. The command that we use is ```docker pull```. With that command, we're requesting from Docker that we want to download an image from its registry to the host. 
+Let's pull an image. The command that we use is ```docker pull```. With this command, we're requesting from Docker that we want to download an image from its registry to the host. 
 
 Type: 
 ```shell
@@ -49,7 +49,7 @@ Yes it's possible to tag an image with different tags. Let's do that and add ano
 
 Type: 
 ```shell
-$ docker image tag ubuntu:latest your_dockerhub_id/day6:ubuntu
+$ docker image tag ubuntu:latest your_dockerhub_id/dockerday:ubuntu
 ```
 We have added a second name to the image. Let's check and see.
 
@@ -61,12 +61,12 @@ Output will be something like:
 ```shell
 REPOSITORY            TAG                 IMAGE ID            CREATED             SIZE
 ubuntu                latest              1e4467b07108        2 weeks ago         73.9MB
-ozgurozturknet/day6   ubuntu              1e4467b07108        2 weeks ago         73.9MB
+ozzy/dockerday        ubuntu              1e4467b07108        2 weeks ago         73.9MB
 ```
 
 We have 2 images that are stored on our host. Image ids are same, so these are literally the same images but with different names. 
 
-We have added a new tag-name to ubuntu:latest image. We tagged it with our Docker Hub id. This means that this image is stored "or will be stored" on Docker Hub (Remember, image names also indicate where the image is located). But it isn't at the moment. Let's correct this and push this image to its repository. But before that we have to login and authenticate. This way, Docker Hub knows that we're the right person who can push this image to its respository. Let's login first. 
+We have added a new tag-name to ubuntu:latest image. We tagged it with our Docker Hub id. This means that this image is stored "or will be stored" on Docker Hub (Remember, image names also indicate where the image is located). But it isn't at the moment. Let's correct this and push this image to its repository. But before that we have to login and authenticate. This way, Docker Hub knows that we're the right person who can push this image to its repository. Let's login first. 
 
 Type: 
 ```shell
@@ -75,7 +75,7 @@ $ docker login
 Output will be something like:
 ```shell
 Login with your Docker ID to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com to create one.
-Username: ozgurozturknet
+Username: ozzy
 Password:
 Login Succeeded
 ```
@@ -84,18 +84,18 @@ Now we're ready to push.
 
 Type: 
 ```shell
-$ docker push your_dockerhub_id/day6:ubuntu
+$ docker push your_dockerhub_id/dockerday:ubuntu
 ```
 Output will be something like:
 ```shell
-The push refers to repository [docker.io/ozgurozturknet/day6]
+The push refers to repository [docker.io/ozzy/dockerday]
 095624243293: Mounted from library/ubuntu
 a37e74863e72: Mounted from library/ubuntu
 8eeb4a14bcb4: Mounted from library/ubuntu
 ce3011290956: Mounted from library/ubuntu
 ubuntu: digest: sha256:60f560e52264ed1cb7829a0d59b1ee7740d7580e0eb293aca2d722136edb1e24 size: 11529MB
 ```
-That was fast, wasn't it? Please pay attention to the output. ```Mounted from library/ubuntu```. You know that images consist of multiple layers. And each layer has its unique id. When we pull or push any image, if the target (registry or your computer) has the same layer with tha same id stored on it, it doesn't pull or push that layer phyiscally again. Just checks and mounts that. This is the reason why it was fast. We didn't transfer any file to Docker Hub. Docker Hub detected that these 4 layers are already stored on it, so instead of getting it again, Docker hub just mounted these files to our repository. This is also same on our computer. We have 2 images stored on it. But they are literally the same images with different names. Docker doesn't store multiple files for these 2 images. Image files are stored just once but multiple tags are added to the same files.
+That was fast, wasn't it? Please pay attention to the output. ```Mounted from library/ubuntu```. Images consist of multiple layers. And each layer has its unique id. When we pull or push any image, if the target (registry or your computer) has the same layer with the same id stored on it, it doesn't pull or push that layer phyiscally again. Just checks and mounts that. This is the reason why it was fast. We didn't transfer any file to Docker Hub. Docker Hub detected that these 4 layers are already stored on it, so instead of getting it again, Docker hub just mounted these files to our repository. This is also the same on our computer. We have 2 images stored on it. But they are literally the same image with different names. Docker doesn't store multiple files for these 2 images. Image files are stored just once but multiple tags are added to the same files.
 
 But what are these layers? Is there any way to see how they are created? Yes and the command that we'll use is ```docker image history```. History sub-command shows us history of the image and it also shows how all these layers were created. Let's check this. 
 
@@ -126,38 +126,38 @@ First, we should clone this Github repository.
 
 Type: 
 ```shell
-$ git clone https://github.com/azuredevcollege/trainingdays.git
+$ git clone https://github.com/azuredevcollege/dockerday.git
 ```
 Output will be something like:
 ```shell
-Cloning into 'trainingdays'...
-remote: Enumerating objects: 42, done.
-remote: Counting objects: 100% (42/42), done.
-remote: Compressing objects: 100% (31/31), done.
+Cloning into 'dockerday'...
+remote: Enumerating objects: 9950, done.
+remote: Counting objects: 100% (29/29), done.
+remote: Compressing objects: 100% (18/18), done.
 remote: Total 1899 (delta 26), reused 25 (delta 11), pack-reused 1857 Receiving objects:  97% (1843/1899), 57.20 MiB | 11.92 MiB/s
 Receiving objects: 100% (1899/1899), 63.35 MiB | 11.26 MiB/s, done.
 Resolving deltas: 100% (747/747), done.
 Updating files: 100% (1396/1396), done.
 ```
 
-Repo has been cloned. It's time to jump to the
-```trainingdays/day6/apps/first_docker_image``` folder. cd to that folder and
+This repo has been cloned. It's time to jump to the
+```dockerday/day6/apps/first_docker_image``` folder. cd to that folder and
 list all the files.
 
 
 Type: 
 ```shell
-$ cd trainingdays/day6/apps/first_docker_image
+$ cd dockerday/day6/apps/first_docker_image
 $ ls -l
 ```
 Output will be something like:
 ```shell
 total 8
--rw-r--r-- 1 ozozturk ozozturk  90 Jun 12 11:56 Dockerfile
--rw-r--r-- 1 ozozturk ozozturk 211 Jun 12 11:21 index.html
+-rw-r--r-- 1 ozzy ozzy  90 Jun 12 11:56 Dockerfile
+-rw-r--r-- 1 ozzy ozzy 211 Jun 12 11:21 index.html
 ```
 
-There are 2 files in that folder. ```index.html``` is a simple html file that has been created by us. We want to build a web server image with this file has been copied in it. To be able to build an image, we need a ```Dockerfile```. A Dockerfile is a text document that contains all the commands a user could call on the command line to assemble an image. We have one in this folder. Let's check and see what's in it. This is one of the simplest form of a Dockerfile.
+There are 2 files in that folder. ```index.html``` is a simple html file that has been created by us. We want to build a web server image with this file being copied in it. To be able to build an image, we need a ```Dockerfile```. A Dockerfile is a text document that contains all the commands a user could call on the command line to assemble an image. We have one in this folder. Let's check and see what's in it. This is one of the simplest form of a Dockerfile.
 
 Type: 
 ```shell
@@ -170,11 +170,11 @@ COPY index.html /usr/share/nginx/html
 CMD ["nginx", "-g", "daemon off;"]
 ```
 
- If we cd to a folder which has Dockerfile in it and type ```docker image build .```, Docker starts to run instructions in that Dockerfile in order. A Dockerfile must begin with the "FROM" instruction. "FROM" instruction specifies the Parent Image that you are trying to build this new image on top of. ```FROM``` basically means that "hey Docker, download that image and execute the next instructions on top of that". It's the base image that we build our image on top of. In our case, it is ```nginx:latest```. We're building our image on top of ngninx:latest. 
+ If we cd to a folder which has a Dockerfile in it and type ```docker image build .```, Docker starts to run instructions in that Dockerfile in order. A Dockerfile must begin with the **"FROM"** instruction. **"FROM"** specifies the Parent Image that you are trying to build this new image on top of. **"FROM"** basically means "hey Docker, download that image and execute the next instructions on top of that". It's the base image that we build our image on top of. In our case, it is ```nginx:latest```. So we're building our image on top of ngninx:latest. 
 
-The second instruction in that Dockerfile is ```COPY```. The COPY instruction copies new files or directories from "source" to the "destination" inside the container. In our case, we have instructed Docker to copy the ```index.html``` file located in the current folder to the ```/usr/share/nginx/html``` folder inside the image. ```/usr/share/nginx/html``` is the folder where Nginx stores websites that it serves. We copied our index.html to that folder, So nginx daemon will serve our web page. 
+The second instruction in that Dockerfile is **"COPY"**. The **"COPY"** instruction copies new files or directories from **"source"** to the **"destination"** inside the container. In our case, we have instructed Docker to copy the ```index.html``` file located in the current folder to the ```/usr/share/nginx/html``` folder inside the image. ```/usr/share/nginx/html``` is the folder where nginx stores websites that it serves. We copied our index.html to that folder, so the nginx daemon will serve our web page. 
 
-The third and last instruction in this Dockerfile is CMD. The main purpose of the "CMD" instruction is that providing defaults of an executing container. In short, it defines the command to execute when you run a container from that image. There can be only one CMD instruction in any Dockerfile. If you list more than one CMD then only the last CMD will take effect. In our case, we want Docker to start nginx daemon when we create a container. 
+The third and last instruction in this Dockerfile is **"CMD"**. The main purpose of the **"CMD"** instruction is to provide defaults of an executing container. In short, it defines the command to execute when you run a container from that image. There can be only one **"CMD"** instruction in any Dockerfile. If you list more than one **"CMD"** then only the last **"CMD"** will take effect. In our case, we want Docker to start the nginx daemon when we create a container. 
 
 Ok, it's time to create our first image. We checked the Dockerfile and see what it includes. Now we can build the first image.
 
@@ -194,7 +194,7 @@ Step 3/3 : CMD ["nginx", "-g", "daemon off;"]
 Removing intermediate container 772fbfd4dba3
  ---> 560570bf44e5
 Successfully built 560570bf44e5
-Successfully tagged ozgurozturknet/firstimage:latest
+Successfully tagged ozzy/firstimage:latest
 ```
 Congrats! We have built our first image. Let's create a container to see if it's working as expect.
 
@@ -227,23 +227,23 @@ test_container
 <details>
   <summary>Click to expand!</summary>
 
-This time we're gonna build a node.js app image. cd to the ```/trainingdays/day6/apps/nodejs``` folder and list all the files. 
+This time we're gonna build a node.js app image. cd to the ```/dockerday/day6/apps/nodejs``` folder and list all the files. 
 
 
 Type: 
 ```shell
-$ cd /trainingdays/day6/apps/nodejs
+$ cd ../nodejs
 $ ls -l
 ```
 Output will be something like:
 ```shell
 total 12
--rw-r--r-- 1 ozozturk ozozturk 292 Aug 12 20:27 Dockerfile
--rw-r--r-- 1 ozozturk ozozturk 288 Aug 12 20:14 package.json
--rw-r--r-- 1 ozozturk ozozturk 273 Aug 12 20:15 server.js
+-rw-r--r-- 1 ozzy ozzy 292 Aug 12 20:27 Dockerfile
+-rw-r--r-- 1 ozzy ozzy 288 Aug 12 20:14 package.json
+-rw-r--r-- 1 ozzy ozzy 273 Aug 12 20:15 server.js
 ```
 
-This time we have 3 files. First one is ```package.json```. If you work with JavaScript, or you've ever interacted with a JavaScript project, Node.js or a frontend project, you surely met the package.json file. The package.json file is kind of a manifest for your project. It can do a lot of things, but in our case it's specially important because it defines the dependencies that we'll install with npm. Our simple node application is running on top of Express framework and we need that framework to be installed to run our simple Javascript webapp. ```Server.js``` is the second file and it's our main Javascript application. It's a simple "Hello World" web app. And the third one is the usual suspect. Dockerfile. Let's take a look at it. 
+This time we have 3 files. First one is ```package.json```. If you work with JavaScript, or you've ever interacted with a JavaScript project, Node.js or a frontend project, you surely met the package.json file. The package.json file is kind of a manifest for your project. It can do a lot of things, but in our case it's specially important because it defines the dependencies that we'll install with npm. Our simple node application is running on top of the Express framework and we need that framework to be installed to run our simple Javascript webapp. ```server.js``` is the second file and it's our main Javascript application. It's a simple "Hello World" web app. And the third one is the usual suspect. ```Dockerfile```. Let's take a look at it. 
 
 Type: 
 ```shell
@@ -267,14 +267,15 @@ RUN npm install
 # Exposing the port 8080
 EXPOSE 8080
 
+# Command to be executed when the container is run
 CMD [ "node", "server.js" ]
 ```
 
-I want you to pay attention to 2 things. First, as you can see, we can add comments to Dockerfile. Any line starting with ```#``` is treated as a comment and not processed. Second, we have 3 new instructions, ```WORKDIR``` , ```RUN``` and ```EXPOSE```. The default working directory for running binaries within a container is the root directory (/), but you can set a different folder by using "WORKDIR" instruction. It's kind of cd'ing to that folder. Any command that you execute after that insturction will be executed in this folder. If there isn't any folder with that name in the image, Docker creates the folder first but If there is, Docker uses that. 
+I want you to pay attention to 2 things. First, as you can see, we can add comments to a Dockerfile. Any line starting with ```#``` is treated as a comment and not processed. Second, we have 3 new instructions, **```WORKDIR```** , **```RUN```** and **```EXPOSE```**. The default working directory for running binaries within a container is the root directory (/), but you can set a different folder by using the **"WORKDIR"** instruction. It's kind of cd'ing to that folder. Any command that you execute after that insturction will be executed in this folder. If there isn't any folder with that name in the image, Docker creates the folder first, but if there is, Docker uses that. 
 
-The "RUN" instruction will execute any commands in a new layer on top of the current image and commit the results. The resulting committed image will be used for the next step in the Dockerfile. When we want to execute anything, we use this instruction. 
+The **"RUN"** instruction will execute any commands in a new layer on top of the current image and commit the results. The resulting committed image will be used for the next step in the Dockerfile. When we want to execute anything, we use this instruction. 
 
-The "EXPOSE" instruction informs Docker that the container listens on the specified network ports at runtime. You can specify whether the port listens on TCP or UDP, and the default is TCP if the protocol is not specified. The EXPOSE instruction does not actually publish the port. It functions as a type of documentation about which ports are intended to be published between the person who builds the image and the person who runs the container. To actually publish any port, we should use the -p flag during container creation.
+The **"EXPOSE"** instruction informs Docker that the container listens on the specified network ports at runtime. You can specify whether the port listens on TCP or UDP, and the default is TCP if the protocol is not specified. The **"EXPOSE"** instruction does not actually publish the port. It functions as a type of documentation about which ports are intended to be published between the person who builds the image and the person who runs the container. To actually publish any port, we should use the **-p** flag during container creation.
 
 Now it's time to build the image. 
 
@@ -315,10 +316,10 @@ Step 7/7 : CMD [ "node", "server.js" ]
 Removing intermediate container 152317b9eafe
  ---> a832145edf14
 Successfully built a832145edf14
-Successfully tagged ozgurozturknet/node:latest
+Successfully tagged ozzy/node:latest
 ```
 
-Image has been built successfully. But I want you to run the same command one more time. 
+The image has been built successfully. But I want you to run the same command one more time. 
 
 ```shell
 Sending build context to Docker daemon  4.096kB
@@ -343,12 +344,12 @@ Step 7/7 : CMD [ "node", "server.js" ]
  ---> Using cache
  ---> fb0586534394
 Successfully built fb0586534394
-Successfully tagged ozgurozturknet/node:latest
+Successfully tagged ozzy/node:latest
 ```
 
-Something strange has happened. We built that image a few seconds ago and we didn't change any source file after that. Then we reran the docker image build command second time but we received lots of ``` ---> Using cache``` messages this time. What does that mean? 
+Something strange has happened. We built that image a few seconds ago and we didn't change any source file after that. Then we reran the docker image build command a second time but we received lots of ``` => CACHED``` messages this time. What does that mean? 
 
-When building an image, Docker steps through the instructions in your Dockerfile, executing each in the order specified. As each instruction is examined, Docker looks for an existing layers in its cache that it can reuse, rather than creating a new (duplicate) layer. If you don't change any source file or didn't change anything in the Dockerfile, this means that nothing has changed, so Docker doesn't run the instruction again and again. Instead of that, Docker uses the cached layers. That makes the build process fast. Let's simulate that and see what happens if we change something. Open ```server.js``` file with a text editor, go to line 12 and change the ```Hello World``` message with another message something like ```build cache test```. Save the file and rerun ```docker image build -t your_dockerhub_id/node:latest .``` command one more time. 
+When building an image, Docker steps through the instructions in your Dockerfile, executing each in the order specified. As each instruction is examined, Docker looks for existing layers in its cache that it can reuse, rather than creating a new (duplicate) layer. If you don't change any source file or didn't change anything in the Dockerfile, this means that nothing has changed, so Docker doesn't run the instruction again and again. Instead of that, Docker uses the cached layers. That makes the build process fast. Let's simulate that and see what happens if we change something. Open ```server.js``` file with a text editor, go to line 12 and change the ```Hello World``` message with another message something like ```build cache test```. Save the file and rerun ```docker image build -t your_dockerhub_id/node:latest .``` command one more time. 
 
 ```shell
 Sending build context to Docker daemon  4.096kB
@@ -382,12 +383,12 @@ Step 7/7 : CMD [ "node", "server.js" ]
 Removing intermediate container b0fae2027731
  ---> 729b13c3276f
 Successfully built 729b13c3276f
-Successfully tagged ozgurozturknet/node:latest
+Successfully tagged ozzy/node:latest
 ```
 
-Docker started to build an image again. First step, nothing changed, used the cache. Second step, nothing changed, used the cache. Third step, nothing changed, used the cache. But fourth step, we wanted to copy server.js file, which has been changed. Old layer that Docker has created and cached before is invalid now. So Docker started to execute that instruction and created a new layer and didn't use the cached version. And each instruction after that has been executed again and Docker didn't use the cache. Because something has changed and the rest of the layers should be affected too. Therefore, Docker can't use cache for them too. That's kind of important thing to know. Because you can speed up build process by leveraging build cache. But order of Dockerfile instructions is important.
+Docker started to build an image again. First step, nothing changed, used the cache. Second step, nothing changed, used the cache. Third step, nothing changed, used the cache. But fourth step, we wanted to copy server.js file, which has been changed. The old layer that Docker has created and cached before is invalid now. So Docker started to execute that instruction and created a new layer and didn't use the cached version. And each instruction after that has been executed again and Docker didn't use the cache. Because something has changed and the rest of the layers should be affected too. Therefore, Docker can't use cache for them as well. That's kind of an important thing to know. Because you can speed up build process by leveraging build cache. But the order of Dockerfile instructions is important.
 
-For example, if your Dockerfile contains several instruction, like ours, you can order them from the less frequently changed (to ensure the build cache is reusable) to the more frequently changed. If we move  ```COPY server.js .``` from 4. step to anywhere after the ```RUN npm install``` instruction, this means that, we can change anything in this server.js file and Docker will not rerun npm install each time when we build that image again and use cache for that step. 
+For example, if your Dockerfile contains several instruction, like ours, you can order them from the less frequently changed (to ensure the build cache is reusable) to the more frequently changed. If we move  ```COPY server.js .``` from 4. step to anywhere after the ```RUN npm install``` instruction, this means that, we can change anything in this server.js file and Docker will not rerun ```npm install``` each time when we build that image again and use cache for that step. 
 (Visit https://docs.docker.com/develop/develop-images/dockerfile_best-practices/  for Dockerfile best practices)
 
 It's time to create a container from that image and see if it's working properly. 
@@ -420,11 +421,11 @@ node_container
 <details>
   <summary>Click to expand!</summary>
 
-Let's imagine that we're java developers and working on a new shiny project called App1 (Do you remember our old friend :)). Application has been written and it's ready. Now it is time to check the source code. It's located at ```/trainingdays/day6/apps/java``` folder. cd to that folder and list all the files. 
+Let's imagine that we're java developers and working on a new shiny project called App1 (Do you remember our old friend :)). Application has been written and it's ready. Now it is time to check the source code. It's located at ```/dockerday/day6/apps/java``` folder. cd to that folder and list all the files. 
 
 Type: 
 ```shell
-$ cd /trainingdays/day6/apps/java
+$ cd ../java
 $ ls -l
 ```
 Output will be something like:
@@ -435,7 +436,7 @@ total 8
 -rw-r--r-- 1 ozozturk ozozturk 154 Jun 12 22:35 Dockerfile2
 ```
 
-There are 2 files in it (actually 3 but let's forget Dockerfile2 for now). ```app1.java``` is the source code of our application. Please pay attention. It is not the application, it is just the source code of this application. It isn't compiled yet. To convert this source code to an application, we have to compile this code. We generally do that on our computers via IDEs. But we can use the power of Docker and compile our application while building the image. The Dockerfile in this folder is a good example of that practice. Let's check the Dockerfile. 
+There are 2 files in it (actually 3 but let's ignore Dockerfile2 for now). ```app1.java``` is the source code of our application. Please pay attention. It is not the application, it is just the source code of this application. It isn't compiled yet. To convert this source code to an application, we have to compile this code. We generally do that on our computers via IDEs. But we can use the power of Docker and compile our application while building the image. The Dockerfile in this folder is a good example of that practice. Let's check the Dockerfile. 
 
 Type: 
 ```shell
@@ -450,7 +451,7 @@ RUN javac app1.java
 CMD [ "java" , "app1" ]
 ```
 
-Again, a simple Dockerfile. We want to build our image on top of the "Java Development Kit" image provided by Microsoft. JDK image has all the tools in it that we need to compile our java code and convert it to a java application. First, we copy that source code to the image and after that we jump into that folder and run ```javac app1.java``` command which compiles this source code and generates an application. At the end, we have a CMD instruction that instructs to run this application whenever we create a container from that image. Let's build the image. 
+Again, a simple Dockerfile. We want to build our image on top of the "Java Development Kit" image provided by Microsoft. The JDK image has all the tools in it that we need to compile our java code and convert it to a java application. First, we copy that source code to the image and after that we jump into that folder and run the ```javac app1.java``` command which compiles this source code and generates an application. At the end, we have a **CMD** instruction that instructs to run this application whenever we create a container from that image. Let's build the image. 
 
 
 Type: 
@@ -484,7 +485,7 @@ Removing intermediate container 00a6a2a448ab
 Successfully built ceab35948e29
 Successfully tagged ozgurozturknet/java:latest
 ```
-Image has been built. Let's test it. 
+The image has been built. Let's test it. 
 
 Type: 
 ```shell
@@ -495,14 +496,14 @@ Output will be something like:
 Hello there! I'm App1 Java Console Application
 ```
 
-Perfect. It works. App1 has been compiled and it runs. But it seems to me that, something is wrong with that approach. First of all, we built our image on top of the JDK image. It includes lots of tools for development. Like the one that we ran to compile our application. But, should we really send this image to our customers as is? With all of these development tools? Also our source code is copied to that image too. Maybe that is not something we want. We just wanted to compile our source code and get the application. We want our customers to be able to run this application. We don't want them to have all the unnecessary tools and our source code. Also image size is big, because of these unnecessary tools. These tools are needed for development. They are not needed for running java applications. JRE, java runtime is the thing that we need to run java applications. It's just the runtime and much smaller than the jdk.
+Perfect. It works. App1 has been compiled and it runs. But it seems to me that, something is wrong with that approach. First of all, we built our image on top of the JDK image. It includes lots of tools for development. Like the one that we ran to compile our application. But, should we really send this image to our customers as is? With all of these development tools? Also our source code is copied to that image too. Maybe that is not something we want. We just wanted to compile our source code and get the application. We want our customers to be able to run this application. We don't want them to have all the unnecessary tools and our source code. Also the image size is big, because of these unnecessary tools. These tools are needed for development. They are not needed for running the java applications. JRE, java runtime, is the thing that we need to run java applications. It's just the runtime and much smaller than the JDK.
 
-Instead of sending this image, It would be wise to get this compiled application from that image, copy it to our computer and create another image that includes just this application + runtime, instead of application + source code + development tools. So we need to build another image. To be able to do that, we need to create a second Dockerfile. But eeeh. This is a mess. There should be a simple solution. 
+Instead of sending this image, it would be wise to get this compiled application from that image, copy it to our computer and create another image that includes just this application + runtime, instead of application + source code + development tools. So we need to build another image. To be able to do that, we need to create a second Dockerfile. But eeeh. This is a mess. There should be a simple solution. 
 Yes there is a simple solution to handle this and it's called multi-stage build. 
 
 One of the most challenging thing about building images is keeping the image size down. Each instruction in Dockerfile adds a layer to image, and you need to remember to clean up any artifacts you don’t need before moving on to the next layer. To write a really efficient Dockerfile, you have traditionally needed to employ shell tricks and other logic to keep the layers as small as possible and to ensure that each layer has the artifacts it needs from the previous layer and nothing else. It was actually very common to have one Dockerfile to use for development (which contained everything needed to build your application), and a slimmed-down one to use for production, which only contained your application and exactly what was needed to run it. This has been referred to as the “builder pattern”. But maintaining two Dockerfiles is not ideal. 
 
-With multi-stage builds, you can use multiple FROM statements in your Dockerfile. Each FROM instruction can use a different base, and each of them begins a new stage of the build. You can selectively copy artifacts from one stage to another, leaving behind everything you don’t want in the final image. Dockerfile2 is a perfect example of this kind of multi-stage build. Let's check it. 
+With multi-stage builds, you can use multiple **FROM** statements in your Dockerfile. Each **FROM** instruction can use a different base, and each of them begins a new stage of the build. You can selectively copy artifacts from one stage to another, leaving behind everything you don’t want in the final image. Dockerfile2 is a perfect example of this kind of multi-stage build. Let's check it. 
 
 
 Type: 
@@ -522,10 +523,10 @@ COPY --from=builder /usr/src/myapp .
 CMD ["java", "app1"]
 ```
 
-As you can see, we have a Dockerfile with 2 "FROM" instructions. Think it like 2 Dockerfiles combined together. First part is similar to the Dockerfile that we have built our application a few minutes ago. There are only 2 differences. First, there is a new section at the end of the "FROM" instruction. "AS builder" or it could be "AS anything", just name it. It indicates that this first section of this Dockerfile is named as "builder". We're gonna use this name later to copy artifacts generated in this stage. Second difference is that "CMD" instruction has been removed, because we don't need it anymore. This "builder" stage is just used for compiling the application from its source code. We're taking our source code, copying it into a jdk image, compiling the application in it and that's it. After that we are building our actual image with a new "FROM" instruction. This second stage will create the actual image that will be tagged at the end. It's based on JRE image, not the JDK. 
+As you can see, we have a Dockerfile with 2 **"FROM"** instructions. It is like 2 Dockerfiles combined together. First part is similar to the Dockerfile that we used to built our application a few minutes ago. There are only 2 differences. First, there is a new section at the end of the **"FROM"** instruction. **"AS builder"** or it could be **"AS anything"**, just name it. It indicates that this first section of this Dockerfile is named as "builder". We're gonna use this name later to copy artifacts generated in this stage. Second difference is that the **"CMD"** instruction has been removed, because we don't need it anymore. This "builder" stage is just used to compile the application from its source code. We're taking our source code, copying it into a JDK image, compile the application in it and that's it. After that we are building our actual image with a new **"FROM"** instruction. This second stage will create the actual image that will be tagged at the end. It's based on JRE image, not the JDK. 
 
-Please pay attention to line 8. "COPY --from=builder". We're instructing Docker to copy files from stage called builder. First stage is there just to compile our application. Our source code has been compiled and application has been created at this builder stage. And we're copying just this compiled application into final image. In this way, jdk and any intermediate artifacts are left behind and not present in the final image. The end result is this tiny production image that just includes the application. Not the source code and not the development tools. Let's build this image and see what's going on. 
-(We're gonna use ```-f``` option to point this Dockerfile2. If your Dockerfile name is different than Dockerfile -First letter is Uppercase "D" and file doesn't have any extension like .txt- or Dockerfile is in another folder, you should use -f option and point that file)
+Please pay attention to line 8. ```"COPY --from=builder"```. We're instructing Docker to copy files from the stage called builder. First stage is there just to compile our application. Our source code has been compiled and the application has been created at this builder stage. And we're copying just this compiled application into the final image. In this way, JDK and any intermediate artifacts are left behind and not present in the final image. The end result is this tiny production image that just includes the application. Not the source code and not the development tools. Let's build this image and see what's going on. 
+(We're gonna use the ```-f``` option to point to Dockerfile2. If your Dockerfile name is different than Dockerfile -First letter is Uppercase "D" and file doesn't have any extension like .txt- or Dockerfile is in another folder, you should use -f option and point that file)
 
 Type: 
 ```shell
@@ -566,7 +567,7 @@ Removing intermediate container 00585394dbfb
 Successfully built 7b7c6b3a7f6a
 Successfully tagged ozgurozturknet/finaljava:latest
 ```
-Final image has been built. It's much smaller than the first one. Also only artifacts that we need are included. 
+The final image has been built. It's much smaller than the first one. Also only the artifacts that we need are included. 
 </details>
 
 ***
@@ -574,27 +575,27 @@ Final image has been built. It's much smaller than the first one. Also only arti
 <details>
   <summary>Click to expand!</summary>
 
-This time, we're gonna combine what have we learned so far. We will build 2 images. First one is a simple php application. The other one is famous mysql database. After building images, we will run these and try couple of tricks that we have learned so far. First, let's check and see what we're gonna build. All files are located at ```/trainingdays/day6/apps/php``` folder. cd to that folder and list all the files. 
+This time, we're gonna combine what we have learned so far. We will build 2 images. First one is a simple php application. The other one is a famous mysql database. After building images, we will run these and try couple of tricks that we have learned so far. First, let's check and see what we're gonna build. All files are located at ```/dockerday/day6/apps/php``` folder. cd to that folder and list all the files. 
 
 Type: 
 ```shell
-$ cd /trainingdays/day6/apps/php
+$ cd ../php
 $ ls -l
 ```
 Output will be something like:
 ```shell
 total 24
--rw-r--r-- 1 ozozturk ozozturk  333 Aug 13 11:54 Dockerfile
--rw-r--r-- 1 ozozturk ozozturk   64 Aug 13 11:36 Dockerfile.mysql
--rw-r--r-- 1 ozozturk ozozturk  112 Aug 13 11:36 createtable.sql
--rw-r--r-- 1 ozozturk ozozturk   81 Aug 13 11:36 env.list
--rw-r--r-- 1 ozozturk ozozturk  107 Aug 13 11:36 envmysql.list
-drwxr-xr-x 2 ozozturk ozozturk 4096 Aug 13 11:35 php
+-rw-r--r-- 1 ozzy ozzy  333 Aug 13 11:54 Dockerfile
+-rw-r--r-- 1 ozzy ozzy   64 Aug 13 11:36 Dockerfile.mysql
+-rw-r--r-- 1 ozzy ozzy  112 Aug 13 11:36 createtable.sql
+-rw-r--r-- 1 ozzy ozzy   81 Aug 13 11:36 env.list
+-rw-r--r-- 1 ozzy ozzy  107 Aug 13 11:36 envmysql.list
+drwxr-xr-x 2 ozzy ozzy 4096 Aug 13 11:35 php
 ```
 
-It's a little bit crowded folder. There are 2 Dockerfiles. First one is the Dockerfile that we'll be used to build web app image. Second one will be used to build mysql database image. 
+The folder is a little bit crowded. There are 2 Dockerfiles. First one is the Dockerfile that we'll use to build a web app image. Second one will be used to build a mysql database image. 
 
-There are 2 other files with .list extenison in this folder. These files will be used to define environment variables while creating containers. "env.list" will be passed to php web container. There are couple of environment variables defined in this file and php web application will use these values to connect to the database -username, password etc.-. "envmysql.list" is another environment  variable file and has couple of other environment  variables defined in it. We'll pass this values to mysql container. mysql container will start and create a database using these parameters. Essentially, we could inject these variables into the Dockerfiles. Yes, it's possible. We can define environment variables with ```ENV``` instruction in any Dockerfile and any container created from that image will have these environment variables. But if we do that, these will be hardcoded to image. This means that whoever get this image can access to these values. Especially this isn't a thing that we want for sensitive data like passwords. Therefore, we didn't define them in Dockerfiles. Instead of that, we will pass these values during container creation.  
+There are 2 other files with .list extenison in this folder. These files will be used to define environment variables while creating containers. "env.list" will be passed to the php web container. There are couple of environment variables defined in this file and php web application will use these values to connect to the database -username, password etc.-. "envmysql.list" is another environment  variable file and has couple of other environment  variables defined in it. We'll pass this values to mysql container. mysql container will start and create a database using these parameters. Essentially, we could inject these variables into the Dockerfiles. Yes, it's possible. We can define environment variables with ```ENV``` instruction in any Dockerfile and any container created from that image will have these environment variables. But if we do that, these will be hardcoded to image. This means that whoever get this image can access to these values. Especially this isn't a thing that we want for sensitive data like passwords. Therefore, we didn't define them in Dockerfiles. Instead of that, we will pass these values during container creation.  
 
 "createtable.sql" is an sql script that will create a table, which will be used by php web app to store its data. We'll copy this script to a special folder in the image. When we create a container from that image, mysql will create a table using that script. 
 

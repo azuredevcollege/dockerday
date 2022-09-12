@@ -17,8 +17,8 @@ In this challenge, we're gonna play with Volume and Network objects which are th
 <details>
   <summary>Click to expand!</summary>
 
-Docker volumes are docker objects, just like containers and images. We create them just like creating images or containers. By default, we create them on the host where Docker daemon is running. But if we want, they can be created using various volume plug-ins and these plug-ins allow us to store the data, for example on a nfs drive or on the cloud. 
-After the volume is created, we can mount that volume to any folder inside the container. From that moment, any files written to that folder will be physically stored in the volume. This way, we can keep these files longer than the container's lifetime. Any file in the container is deleted and lost, when container is deleted. Volumes allow us to keep files independent of containers' lifetime. Let's create our first volume and see that in action. 
+Docker volumes are docker objects, just like containers and images. We create them just like creating images or containers. By default, we create them on the host where the Docker daemon is running. But if we want, they can be created using various volume plug-ins and these plug-ins allow us to store the data, for example on a nfs drive or on the cloud. 
+After the volume is created, we can mount that volume to any folder inside the container. From that moment, any files written to that folder will be physically stored in the volume. This way, we can keep these files longer than the container's lifetime. Any file in the container is deleted and lost, when the container is deleted. Volumes allow us to keep files independent of the containers' lifetime. Let's create our first volume and see that in action. 
 
 First let's check if there is any volume has been created on the host before. 
 
@@ -31,7 +31,7 @@ Output will be something like:
 DRIVER              VOLUME NAME
  ```
 
-We don't have any volume at the moment. Let's create the first one. For that, we're gonna use ```docker volume create``` command without any option. If we want to use any specific volume driver, we would use ```-d``` option but we want to create a local volume so we don't have to specify a driver. 
+We don't have any volume at the moment. Let's create the first one. For that, we're gonna use ```docker volume create``` without any option. If we want to use any specific volume driver, we would use ```-d``` but we want to create a local volume so we don't have to specify a driver. 
 
 Type: 
 ```shell
@@ -62,9 +62,9 @@ Output will be something like:
     }
 ]
 ```
-I want you to pay attention to  ```"Mountpoint":``` section of this output. This is literally the path where this volume is located. Any file in this volume is actually stored in this path. Docker Desktop for Windows and Docker Desktop for Mac spin up a lightweight vm and run Docker daemon inside that. Therefore we can't access to this path but if you run Docker daemon on any Linux VM, cd to that path and you can see the files stored in it. Ok, now we have an empty volume. We can mount that volume to a container. It's really easy. The option that we'll use is ```-v``` and the rule is always ```volume-name``` ```:``` ```container-path```. Let's say we want to mount the volume called ```first_volume``` to the folder ```/test```. Our option would be ```-v first_volume:/test```. If this folder doesn't exist in the image, the folder will be created when container is created.
+I want you to pay attention to  the ```"Mountpoint":``` section of this output. This is literally the path where this volume is located. Any file in this volume is stored in this path. Docker Desktop for Windows and Docker Desktop for Mac spin up a lightweight VM and run the Docker daemon inside that. Therefore we can't access this path but if you run Docker daemon on any Linux VM, cd to that path and you can see the files stored in it. Ok, now we have an empty volume. We can mount that volume to a container. It's really easy. The option that we'll use is ```-v``` and the rule is always ```volume-name``` ```:``` ```container-path```. Let's say we want to mount the volume called ```first_volume``` to the folder ```/test```. Our option would be ```-v first_volume:/test```. If this folder doesn't exist in the image, the folder will be created when container is created.
 
-Now it's time to create a container and mount that volume. We're gonna create a new interactive container from ubuntu image and connect to its bash shell. ```first_volume``` will be mounted to container's ```/test``` folder. After it's created, we'll switch to ```/test``` directory and create a file called ```test.txt``` and exit.
+Now it's time to create a container and mount that volume. We're gonna create a new interactive container from an ubuntu image and connect to its bash shell. ```first_volume``` will be mounted to the container's ```/test``` folder. After it is created, we'll switch to ```/test``` directory and create a file called ```test.txt``` and exit.
 
 (We will use another useful option too, which is ```--rm```. If you create a Docker container with ```--rm```, the container will be automatically deleted when it's exited. Therefore you don't need to manually clean later. Please use with caution.)
 
@@ -88,7 +88,7 @@ root@666540d6384b:/test# exit
 exit
 ```
 
-When we exited, the container stopped working. We created that container with ```--rm``` therefore container is deleted too. You can check this by typing ```docker ps -a```. There shouldn't be any running or stopped container at the moment. ```first_volume``` has been mounted to this container's ```/test``` folder. Therefore anything was written to that folder actually was written to the volume. Container was deleted but volume still remains. So our data too. Let's create another container and see that. This time we're gonna create another container from alpine image to see that it doesn't matter which image we use. 
+When we exited, the container stopped working. We created that container with ```--rm``` therefore the container is deleted too. You can check this by typing ```docker ps -a```. There shouldn't be any running or stopped container at the moment. ```first_volume``` has been mounted to this container's ```/test``` folder. Therefore anything written to that folder was actually written to the volume. When the container was deleted the volume remained. So our data too. Let's create another container and see that. This time we're gonna create another container from an alpine image to see that it doesn't matter which image we use. 
 
 Type: 
 ```shell
@@ -148,7 +148,7 @@ root@7c697541e9ed:/#
 ```
 
 
-Now we have 2 containers. con1 and con2. ```first_volume``` is mounted to con1's ```/test``` folder and also it's mounted to con2's ```/test2``` folder. Let's create a file in the ```/test2``` folder at con2. 
+Now we have 2 containers. con1 and con2. The ```first_volume``` is mounted to the con1's ```/test``` folder and also it's mounted to the con2's ```/test2``` folder. Let's create a file in the ```/test2``` folder at con2. 
 
 ```shell
 root@7c697541e9ed:/# cd /test2
@@ -167,7 +167,7 @@ from-con2.txt  test.txt
 root@70fd46786a11:/test#
 ```
 
-This time, we'll create another container and mount ```first_volume``` to ```/test3``` folder but this time the volume will be mounted read only. For that, we're gonna use ```:ro``` option. Open another terminal window and;
+This time, we'll create another container and mount ```first_volume``` to ```/test3``` folder but this time the volume will be mounted read only. For that, we're gonna use the ```:ro``` option. Open another terminal window and;
 
 Type: 
 ```shell
@@ -190,7 +190,7 @@ touch: cannot touch 'newfile.txt': Read-only file system
 root@0f00f388b5e8:/test3#
 ```
 
-Type ```exit``` in all 3 terminals. This will close the containers and they'll be automatically deleted. But volume will not be deleted. Therefore we're gonna keep the files that we need. But now, we're done our exercise so we can delete this volume too.
+Type ```exit``` in all 3 terminals. This will close the containers and they'll be automatically deleted. But volume will not be deleted. Therefore we're gonna keep the files that we need. But now, we're done with our exercise so we can delete this volume too.
 
 Type: 
 ```shell
