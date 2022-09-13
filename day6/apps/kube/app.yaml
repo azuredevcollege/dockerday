@@ -16,7 +16,7 @@ spec:
         "beta.kubernetes.io/os": linux
       containers:
       - name: mysqldb
-        image: day6demo.azurecr.io/mysql:v1 # update the image name
+        image: name_you_chose.azurecr.io/mysql:v1 # update the image name
         ports:
         - containerPort: 3306
           name: mysqldb
@@ -63,7 +63,7 @@ spec:
         "beta.kubernetes.io/os": linux
       containers:
       - name: phpapp
-        image: day6demo.azurecr.io/php:v1 # update the image name
+        image: name_you_chose.azurecr.io/php:v1 # update the image name
         ports:
         - containerPort: 80
         resources:
