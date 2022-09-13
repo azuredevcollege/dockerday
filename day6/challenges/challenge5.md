@@ -358,3 +358,5 @@ When you complete the challenge, please don't forget to delete the resources tha
 __Congratulations__ you have completed the Azure Container Services challenge. You have created your first ACR instance and AKS cluster and deploy an application. 
 
 *** Reference: https://docs.microsoft.com/azure/aks/ https://docs.microsoft.com/azure/container-registry/
+
+[◀ Previous challenge](./challenge4.md) | [🔼 This challenge](./challenge5.md) | [Next challenge ▶](./challenge6.md)

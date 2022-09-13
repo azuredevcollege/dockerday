@@ -28,3 +28,5 @@ https://docs.microsoft.com/learn/modules/run-docker-with-azure-container-instanc
 - https://azure.microsoft.com/mediahandler/files/resourcefiles/container-security-in-microsoft-azure/Open%20Container%20Security%20in%20Microsoft%20Azure.pdf
 - https://snyk.io/blog/privileged-docker-containers/
 - https://docs.docker.com/engine/security/
+
+[◀ Previous challenge](./challenge5.md) | [🔼 This challenge](./challenge6.md)

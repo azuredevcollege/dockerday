@@ -595,13 +595,13 @@ drwxr-xr-x 2 ozzy ozzy 4096 Aug 13 11:35 php
 
 The folder is a little bit crowded. There are 2 Dockerfiles. First one is the Dockerfile that we'll use to build a web app image. Second one will be used to build a mysql database image. 
 
-There are 2 other files with .list extenison in this folder. These files will be used to define environment variables while creating containers. "env.list" will be passed to the php web container. There are couple of environment variables defined in this file and php web application will use these values to connect to the database -username, password etc.-. "envmysql.list" is another environment  variable file and has couple of other environment  variables defined in it. We'll pass this values to mysql container. mysql container will start and create a database using these parameters. Essentially, we could inject these variables into the Dockerfiles. Yes, it's possible. We can define environment variables with ```ENV``` instruction in any Dockerfile and any container created from that image will have these environment variables. But if we do that, these will be hardcoded to image. This means that whoever get this image can access to these values. Especially this isn't a thing that we want for sensitive data like passwords. Therefore, we didn't define them in Dockerfiles. Instead of that, we will pass these values during container creation.  
+There are 2 other files with .list extenison in this folder. These files will be used to define environment variables while creating containers. ```"env.list"``` will be passed to the php web container. There are couple of environment variables defined in this file and php web application will use these values to connect to the database -username, password etc.-. ```"envmysql.list"``` is another environment  variable file and has couple of other environment variables defined in it. We'll pass these values to the mysql container. The mysql container will start and create a database using these parameters. Essentially, we could inject these variables into the Dockerfiles. Yes, it's possible. We can define environment variables with the **"ENV"** instruction in any Dockerfile and any container created from that image will have these environment variables. But if we do that, they will be hardcoded to image. This means that whoever gets this image has access to these values. Especially we do not want that for sensitive data like passwords. Therefore, we didn't define them in Dockerfiles. Instead of that, we will pass these values during container creation.  
 
-"createtable.sql" is an sql script that will create a table, which will be used by php web app to store its data. We'll copy this script to a special folder in the image. When we create a container from that image, mysql will create a table using that script. 
+```"createtable.sql"``` is an sql script that will create a table, which will be used by the php web app to store its data. We'll copy this script to a special folder in the image. When we create a container from that image, mysql will create a table using that script. 
 
-"php" is the folder where our main web app is located. There are 3 files in that folder. It's really a simple web app which allows us to record contact details. Kind of primitive crm. 
+```"php"``` is the folder where our main web app is located. There are 3 files in that folder. It's really a simple web app which allows us to record contact details. Kind of a primitive crm. 
 
-Let's have a look at Dockerfiles before building images. 
+Let's have a look at the Dockerfiles before building images. 
 
 Type: 
 ```shell
@@ -618,9 +618,9 @@ COPY ./php/ /var/www/html/
 HEALTHCHECK --interval=30s --timeout=3s CMD curl -f http://localhost/ || exit 1
 ```
 
-We use official php image as our base. Then we install couple of binaries that we need and create a folder where we'll store uploaded images. After that we copy our web app into image. So far nothing unknown. But now we have a new instruction, "HEALTHCHECK". "HEALTHCHECK" instruction tells Docker "how to test a container to check if it's still working or not?". This can detect cases such as a web server that is stuck in an infinite loop and unable to handle new connections, even though the server process is still running so the container is up. When we run a container which has a healthcheck defined in its image, this container has a "health" status in addition to its "lifecycle" status. This allows us to monitor container's health status and take action if something goes wrong. In our case, we instructed that each container created from that image should start a healthchecking process and continue to do that every 30 seconds. If container gets a response from http://localhost/, Docker will mark the container as healthy, otherwise unhealthy. 
+We use an official php image as our base (line 1). Then we install a couple of binaries that we need (line 2&3) and create a folder where we'll store uploaded images (line 4). After that we copy our web app into image (line 6). So far nothing unknown. But now we have a new instruction, **"HEALTHCHECK"**. **"HEALTHCHECK"** tells Docker "how to test a container to check if it's still working or not?". This can detect cases such as a web server that is stuck in an infinite loop and unable to handle new connections, even though the server process is still running so the container is up. When we run a container which has a healthcheck defined in its image, this container has a "health" status in addition to its "lifecycle" status. This allows us to monitor a container's health status and take action if something goes wrong. In our case, we instructed that each container created from that image should start a healthchecking process and continue to do that every 30 seconds. If container gets a response from http://localhost/, Docker will mark the container as healthy, otherwise unhealthy (line 7). 
 
-All good so far but there's something strange in this Dockerfile. We don't have any CMD instruction in this file. So, which application will be started when a container been created from that image? Is there anything like secret CMD or something else? Answer is really simple. When you build an image, Docker inherits all the settings from base image. If you specify anything on your Dockerfile, it overwrites the same value that is inherited from base image. But if you left it blank, Image uses the inherited value from base image. In our case, we don't have the CMD instruction, so Docker will inherit this from base image. That's enough for the first Dockerfile. Let's take have a look at mysql's Dockerfile too. 
+All good so far but there's something strange in this Dockerfile. We don't have any **CMD** instruction in this file. So, which application will be started when a container has been created from that image? Is there anything like a secret **CMD** or something else? The Answer is really simple. When you build an image, Docker inherits all the settings from the base image. If you specify anything on your Dockerfile, it overwrites the same value that is inherited from base image. But if you leave it blank, the image uses the inherited value from the base image. In our case, we don't have the **CMD** instruction, so Docker will inherit this from the base image. That's enough for the first Dockerfile. Let's take have a look at mysql's Dockerfile too. 
 
 Type: 
 ```shell
@@ -632,7 +632,7 @@ FROM mysql:5.7
 COPY createtable.sql /docker-entrypoint-initdb.d
 ```
 
-This is really short. We're gonna use mysql:5.7 as our base and copy createtable.sql to /docker-entrypoint-initdb.d folder. That's all. When a mysql container is started for the first time, a new database with the specified name will be created and initialized with the provided configuration variables. In addition to that, mysql container executes files with extensions .sh, .sql and .sql.gz that are found in /docker-entrypoint-initdb.d folder. That's the reason why we copy our sql script to this folder. When a container is been created from that image, it'll execute this script and this script will create our database.  (See https://hub.docker.com/_/mysql for details)
+This is really short. We're gonna use mysql:5.7 as our base (line 1) and copy ```createtable.sql``` to the /docker-entrypoint-initdb.d folder (line 2). That's all. When a mysql container is started for the first time, a new database with the specified name will be created and initialized with the provided configuration variables. In addition to that, mysql container executes files with extensions .sh, .sql and .sql.gz that are found in /docker-entrypoint-initdb.d folder. That's the reason why we copy our sql script to this folder. When a container is being created from that image, it'll execute this script and this script will create our database.  (See https://hub.docker.com/_/mysql for details)
 
 It's time to build 2 images. 
 
@@ -656,10 +656,10 @@ Removing intermediate container d6dc02b8ca50
 Step 7/7 : COPY ./php/ /var/www/html/
  ---> 53959f571f38
 Successfully built 53959f571f38
-Successfully tagged ozgurozturknetphp:v1
+Successfully tagged ozzy:v1
 ```
 
-Php image is ready. Let's build mysql image now. 
+The php image is ready. Let's build the mysql image now. 
 
 Type: 
 ```shell
@@ -674,10 +674,10 @@ Status: Downloaded newer image for mysql:5.7
 Step 2/2 : COPY createtable.sql /docker-entrypoint-initdb.d
  ---> 2dfc8038fc98
 Successfully built 2dfc8038fc98
-Successfully tagged ozgurozturknetmysql:v1
+Successfully tagged ozzy:v1
 ```
 
-Done. Images are ready. It's time to run our fancy crm application but first let's create a new bridge network. Web contaier should access to mysql database container via its name. Therefore, these containers must be able to resolve each others name. 
+Done. The images are ready. It's time to run our fancy crm application but first let's create a new bridge network. The web container should access to the mysql database container via its name. Therefore, these containers must be able to resolve each others name. 
 
 Type: 
 ```shell
@@ -687,7 +687,7 @@ Output will be something like:
 ```shell
 f3b75a829c3f7a8d5268dbf9dcb884071b3affaed642b3fe6354e78193d054c6
 ```
-Images are ready. Bridge network has been created. We're ready to create containers. 
+The images are ready. The bridge network has been created. We're ready to create the containers. 
 
 
 Type: 
@@ -714,12 +714,12 @@ $ docker ps
 ```
 Output will be something like:
 ```shell
-CONTAINER ID        IMAGE                    COMMAND                  CREATED              STATUS                        PORTS                 NAMES
-02d51c5ad53c        ozgurozturknetmysql:v1   "docker-entrypoint.s…"   53 seconds ago       Up 52 seconds                 3306/tcp, 33060/tcp   mysqldb
-c580f355ad83        ozgurozturknetphp:v1     "docker-php-entrypoi…"   About a minute ago   Up About a minute (healthy)   0.0.0.0:80->80/tcp    phpapp
+CONTAINER ID        IMAGE             COMMAND                  CREATED              STATUS                        PORTS                 NAMES
+02d51c5ad53c        ozzy/mysql:v1     "docker-entrypoint.s…"   53 seconds ago       Up 52 seconds                 3306/tcp, 33060/tcp   mysqldb
+c580f355ad83        ozzy/php:v1       "docker-php-entrypoi…"   About a minute ago   Up About a minute (healthy)   0.0.0.0:80->80/tcp    phpapp
 ```
 
-Containers are up and running and also phpapp's status is healthy. Let's open a browser and see if php application is also working and can connect to mysql database or not. Visit http://127.0.0.1
+Containers are up and running and the phpapp's status is healthy. Let's open a browser and see if the php application is also working and can connect to mysql database or not. Visit http://127.0.0.1
 
 <img src="./img/php1.png">
 
@@ -733,7 +733,7 @@ If you saw this message, everything is fine. Click View and check your records.
 
 Congratulations! You have successfully built a 2-tier web app and run that locally. 
 
-Now we can stop and delete the containers. Please don't delete these images for now. We will use these at Challange 5. 
+Now we can stop and delete the containers. Please don't delete these images for now. We will use them in Challange 5. 
 Type: 
 ```shell
 $ docker container rm -f mysqldb phpapp
@@ -770,7 +770,12 @@ Output will be something like:
 ```shell
 sha256:8f5d8a8e42bd9419f6a932c0e70b0700f0618096d6c3f4a06753520fac236ed7
 ```
-Our image is ready. Now if we want, we can push it to our repository and move it to anywhere we want. 
+See the image by typing:
+```shell
+docker images
+```
+Our image is ready and should be the first one in the list. Now if we want, we can push it to our repository and move it to anywhere we want. 
+
 </details>
 
 ***
@@ -779,3 +784,5 @@ Our image is ready. Now if we want, we can push it to our repository and move it
 __Congratulations__ you have completed the Image and Registry challenge and learned how to create Docker images and play with them. 
 
 *** Reference: https://docs.docker.com
+
+[◀ Previous challenge](./challenge3.md) | [🔼 This challenge](./challenge4.md) | [Next challenge ▶](./challenge5.md)
