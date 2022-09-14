@@ -340,21 +340,89 @@ kubernetes                                 ClusterIP      10.0.0.1       <none> 
 
 <img src="./img/acr25.png">
 
-***
-**4: Clean-up**
-
-When you complete the challenge, please don't forget to delete the resources that you have created. Via the portal, find the resource group that you have created at the beginning of this challenge and delete it. All the resources **ACR, AKS** that you have created in this resource group will be automatically deleted too. 
-<img src="./img/acr26.png">
-
-<img src="./img/acr27.png">
-
-<img src="./img/acr28.png">
+When you complete the challenge, please don't forget to delete the resources that you have created. Via the portal, find the resource group that you have created at the beginning of this challenge or used as it was provided to you. Find the **Kubernetes service** that you have created in this resource group select it and press the **Delete** button. You need to confirm your choice
+<img src="./img/acr09.png">
 </details>
+
+***
+
+**4: Azure Container Apps**
+<details>
+  <summary>Click to expand!</summary>
+
+For this part we will have a look at the [Azure Container Apps (ACA)](https://docs.microsoft.com/en-us/azure/container-apps/overview). 
+
+- We will use our first docker image for this. So on your local terminal enter ```docker images ls``` to make sure the "username/firstimage:latest" repository is still there.
+- Again we will add new tags
+```shell
+docker image tag your_dockerhub_id/firstimage:latest acr_login_url/firstimage:v1
+```
+- And than push it to our Azure Container Registry
+```shell
+docker image push acr_login_url/firstimage:v1
+```
+
+- Check in the portal if the image is now in the ACR as you have done in the 2nd task.
+
+- After that, still in the portal, find your Resource Group and on the overview screen click **+ Create**. 
+
+![](./img/acr121.png)
+
+- Under the the **Containers** click **Container App** and after that hit **Create**.
+  > This view might have changed. In that case you can just enter "Container App" into the search bar.
+
+- Click **Create**
+
+- Make sure the right Subscription and Resource group are selected on the *Create Container App* screen
+- Fill in the other values:
+  - Container app name: Type a unique name
+  - Region: Select **North Europe**
+  - Container Apps Environment: Leave as is
+
+- Click **App settings**. Since we already have images in our Image Registry let's go ahead and use them.
+
+![](./img/acr06.png)
+
+- Make the following settings
+  - Use quickstart image: unselect :black_square_button:
+  - Name: give the container a name
+  - Image source: **Azure Container Registry**
+  - Registry: select your ACR --> **something.azurecr.io**
+  - Image: **firstimage**
+  - Image tag: **v1**
+  - Command override: leave empty
+  - CPU and Memory: **0.25 CPU cores, 0.5 Gi memory**
+  - HTTP Ingress: Enabled :white_check_mark:
+  - Ingress traffic: **Accepting traffic from anywhere**
+  - Target port: **80**
+
+
+- Hit **Review + create** and on the Overview screen check if everything is correct and hit **Create**
+
+
+![](./img/acr07.png)
+
+- This might take a while. If the deployment is ready hit **Go to resource**
+
+- On the Overview screen of your newly created ACA find the **Application Url** and click on it.
+
+![](./img/acr08.png)
+
+**Congrats!!! You have deployed your first image in an Azure Container App.**
+
+</details>
+
+***
+
+**5: Clean Up**
+
+Please delete all resources that you created in the same manner as you did before delete the Kubernetes service.
+That should include: **Azure Container Apps**, **Azure Container Apps Environment**, **Azure Log Analytics workspace** and **Azure Container Registry**.
 
 ***
 ## Wrap up
 
-__Congratulations__ you have completed the Azure Container Services challenge. You have created your first ACR instance and AKS cluster and deploy an application. 
+__Congratulations__ you have completed the Azure Container Services challenge. You have created your first ACR instance, an AKS cluster, you deployed an application and created your first Azure Container App. 
 
 *** Reference: https://docs.microsoft.com/azure/aks/ https://docs.microsoft.com/azure/container-registry/
 
