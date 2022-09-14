@@ -78,16 +78,50 @@ $ az account set -s <SUBSCRIPTIONID_YOU_WANT_TO_USE>
 
 ## WSL 2
 
-If you are running Windows 10 or Windows 11 you can install a Linux distribution by using the Windows Subsystem for Linux. This way you can use Linux tools and still be completely integrated with your Windows tools. While this is optional we highly recommend it. Follow this [link](https://docs.microsoft.com/en-us/windows/wsl/install) to install the WSL 2.
+If you are running Windows 10 or Windows 11 you can install a Linux distribution by using the Windows Subsystem for Linux. This way you can use Linux tools and still be completely integrated with your Windows tools. While this is optional if you are going to use Docker Desktop today we highly recommend it. If you cannot use Docker Desktop you need to be either working on Linux or install the WSL2. Follow this [link](https://docs.microsoft.com/en-us/windows/wsl/install) to install the WSL 2.
 
 
 ## Docker
 
 <img src="./img/dockerlogo.png" width="200">
 
-It's obvious that it's expected you to have Docker installed on your computer. But installation process is not as seamless as it has to be. Docker publishes different packages for different operating systems. Please follow the section of your operating system below and install related Docker package published for your operating system. 
+It's obvious that it's expected you to have Docker installed on your computer. But the installation process is not as seamless as it could be. Docker publishes different packages for different operating systems. Please follow the section of your operating system below and install related Docker package published for your operating system. 
 
-***If you can't install any software on your computer due to company policies or other reasons, please spin up an Ubuntu VM on Azure and follow the Linux section below***
+> ***If you can't install any software on your computer due to company policies or other reasons, please spin up an Ubuntu VM on Azure and follow the Linux section below***
+> *If you cannot install Docker Desktop install the docker engine in the WSL2. Follow the WSL2 description below.*
+
+### WSL2
+
+Docker Desktop is really convenient and specifically on Windows it is extraordinary helpfull and easy to use. But it has drawbacks - it is quite greedy when it comes to memory. We still recommend using Docker Desktop, but if not possible here is a way to install the Docker engine in your WSL. We are expecting that you went with Debian or Ubuntu as Linux distribution.
+
+<details>
+  <summary>Click to expand!</summary>
+
+  1. First of all make sure you are a non-root user with admin access.
+    - ```whoami``` should return your username. If you already have a user switch to it using ```su username```. If you need to create a user do so by typing ```sudo adduser username```. Make sure to remember the password.
+    - If you can use the ```sudo``` commands you have the admin rights (try ```sudo -v```). If this throws an error make sure you are in root and add the user to the admin group by typing ```usermod -aG sudo username```. Now again switch to your user ```sudo username``` and than try ```sudo -v``` again. If you still get an error look at these more detailed [instructions](https://dev.to/bowmanjd/install-docker-on-windows-wsl-without-docker-desktop-34m9).
+  1. As always with Linux make sure everything is up to date before we make any changes ```sudo apt update && sudo apt upgrade```.
+  1. Now let's install the dependencies needed by typing ```sudo apt install --no-install-recommends apt-transport-https ca-certificates curl gnupg2```
+  1. ```update-alternatives --config iptables``` select iptables-legacy
+  1. ```. /etc/os-release```
+  1. ```curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo tee /etc/apt/trusted.gpg.d/docker.asc``` you might need to replace ubuntu here with debian if you chose that distribution.
+  1. ```echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable" | sudo tee /etc/apt/sources.list.d/docker.list``` again you might need to replace ubuntu here with debian if you chose that distribution. Also "focal" here is the code name for the specific distribution version - in this case "ubuntu 20.04 LTS". Enter ```cat /etc/*-release``` to get the details of your distribution. There you will find "DISTRIB_CODENAME=focal" for example. Replace the version code in the command if you have a different "DISTRIB_CODENAME".
+  1. ```sudo apt update```
+  1. Now we can install Docker by typing ```sudo apt install docker-ce docker-ce-cli containerd.io```
+  1. ```usermod -aG docker username``` allows your user to use docker commands.
+  1. Start the Docker Daemon in your WSL2 window. ```sudo docker``` will show if docker is installed.```sudo dockerd``` will start the Daemon. Whenever you want to work with Docker make sure that the Docker Daemon is up and running.
+  1. Now that the Daemon is running open another WSL2 terminal. Make sure you are the user there by typing ```whoami``` if this returns root you need to sitch to your user like this: ```su username```.
+  1. Try to run a Docker image to see if everything is set up correctly. Enter ```docker run --rm hello-world```. This should return something like this:
+```shell
+...
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+...
+```
+
+Congrats you are all set up with Docker. Be sure to start the Docker Daemon in a seperate WSL2 terminal whenever you want to work with Docker by entering the command ```sudo dockerd```. For now you can exit it by writing ```exit``` and hitting Enter.
+
+</details>
 
 ### Mac Os
 
