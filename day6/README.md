@@ -7,19 +7,19 @@ The main goal of the Docker Fundamentals Day is basically building Linux Contain
 ---
 ## Agenda
 
-09:00 - 09:45 **Info Slot 1** 45 min
+09:00 - 10:00 **Info Slot Docker 101** 60 min
 
-09:45 - 10:00 **Break** 15 min
+10:00 - 10:15 **Break** 15 min
 
-10:00 - 10:45 **Info Slot 2** 45 min
+10:15 - 10:45 **Info Slot Containers on Azure** 30 min
 
-10:45 - 11:00 **Break** 15 min
-
-11:00 - 12:00 **Info Slot 3** 60 min
+10:45 - 12:00 **Challenges** 75 min
 
 12:00 - 13:00 **Lunch Break** 60 min
 
-13:00 - 17:00 **Challenges** 240 min
+13:00 - 16:30 **Challenges** 210 min
+
+16:30 - 17:00 **Wrap-Up** 30 min
 
 ---
 
